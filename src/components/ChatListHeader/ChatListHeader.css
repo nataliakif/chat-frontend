@@ -1,0 +1,76 @@
+.chat-list-header {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.chat-list-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.user-avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.login-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  background-color: #005;
+}
+
+.chat-search {
+  position: relative;
+  width: 100%;
+}
+
+.chat-search input {
+  width: 80%;
+  padding: 8px 12px 8px 32px; /* место для иконки слева */
+  border: 2px solid #ccc;
+  border-radius: 20px;
+  font-size: 14px;
+  outline: none;
+}
+
+.chat-search input:focus {
+  border-color: #007bff;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: #888;
+  pointer-events: none; /* чтобы клики проходили сквозь */
+}
+.user-avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

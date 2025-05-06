@@ -1,100 +1,62 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ChatWindow from './ChatWindow/ChatWindow';
 import ChatList from './ChatList/ChatList';
+import { getAllChats } from '../api/chatApi';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-// Пример заранее заданных чатов
-const initialChats = [
-  {
-    id: 1,
-    name: 'Alice Freeman',
-    avatar: 'https://i.pravatar.cc/150?img=1',
-    messages: [
-      { text: 'Hi, how are you?', isUser: false, time: '8/17/2022, 7:43 AM' },
-      {
-        text: 'Not bad. What about you?',
-        isUser: true,
-        time: '8/17/2022, 7:45 AM',
-      },
-      {
-        text: 'How was your meeting?',
-        isUser: true,
-        time: '8/17/2022, 7:46 AM',
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: 'Josefina',
-    avatar: 'https://i.pravatar.cc/150?img=2',
-    messages: [
-      {
-        text: 'Hi! No, I am going for a walk.',
-        isUser: false,
-        time: '8/16/2022',
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: 'Velazquez',
-    avatar: 'https://i.pravatar.cc/150?img=3',
-    messages: [
-      {
-        text: 'Hi! I am a little sad, tell me a joke please.',
-        isUser: false,
-        time: '8/14/2022',
-      },
-    ],
-  },
-];
 export const App = () => {
-  const [chats, setChats] = useState(initialChats);
+  const [chats, setChats] = useState([]);
   const [selectedChatId, setSelectedChatId] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const selectedChat = chats.find(chat => chat.id === selectedChatId);
+  useEffect(() => {
+    getAllChats()
+      .then(data => {
+        setChats(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to load chats:', err);
+        setLoading(false);
+      });
+  }, []);
 
-  const handleSendMessage = text => {
-    const newMessage = {
-      text,
-      isUser: true,
-      time: new Date().toLocaleString(),
-    };
+  const selectedChat = chats.find(chat => chat._id === selectedChatId);
 
-    setChats(prevChats =>
-      prevChats.map(chat =>
-        chat.id === selectedChatId
-          ? { ...chat, messages: [...chat.messages, newMessage] }
-          : chat
-      )
-    );
-  };
+  if (loading) {
+    return <div>Loading chats...</div>;
+  }
 
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
-      <ChatList
-        chats={chats}
-        selectedChatId={selectedChatId}
-        onSelectChat={setSelectedChatId}
-      />
-
-      {selectedChat ? (
-        <ChatWindow
-          selectedChat={selectedChat}
-          messages={selectedChat.messages}
-          onSendMessage={handleSendMessage}
+    <>
+      <ToastContainer />
+      <div style={{ display: 'flex', height: '100vh' }}>
+        <ChatList
+          chats={chats}
+          setChats={setChats} // ← пробрасываем управление
+          selectedChatId={selectedChatId}
+          onSelectChat={setSelectedChatId}
         />
-      ) : (
-        <div
-          style={{
-            flex: 1,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <p>Select a chat to start messaging</p>
-        </div>
-      )}
-    </div>
+
+        {selectedChat ? (
+          <ChatWindow
+            selectedChat={selectedChat}
+            refreshChats={() => getAllChats().then(setChats)}
+          />
+        ) : (
+          <div
+            style={{
+              flex: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <p>Select a chat to start messaging</p>
+          </div>
+        )}
+      </div>
+    </>
   );
 };

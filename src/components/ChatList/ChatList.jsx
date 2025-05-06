@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { addNewChat } from '../../api/chatApi';
 import ChatListHeader from '../ChatListHeader/ChatListHeader';
+import Avatar from '../Avatar/Avatar';
+import AddChatModal from '../AddChatModal/AddChatModal';
 import './ChatList.css';
 
-const ChatList = ({ chats, selectedChatId, onSelectChat }) => {
+const ChatList = ({ chats, setChats, selectedChatId, onSelectChat }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [showAddModal, setShowAddModal] = useState(false);
 
   const filteredChats = chats.filter(chat =>
-    chat.name.toLowerCase().includes(searchQuery.toLowerCase())
+    `${chat.firstName} ${chat.lastName}`
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -15,22 +21,46 @@ const ChatList = ({ chats, selectedChatId, onSelectChat }) => {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
       />
-      <div className="chat-liat-title">Chats</div>
+      <div className="chat-list-title">Chats</div>
+      <button onClick={() => setShowAddModal(true)}>+ Add Chat</button>
+
+      {showAddModal && (
+        <AddChatModal
+          onClose={() => setShowAddModal(false)}
+          onAdd={async newChatData => {
+            try {
+              const createdChat = await addNewChat(newChatData);
+              setChats(prev => [...prev, createdChat]); // ← напрямую обновляем App-стейт
+            } catch (err) {
+              console.error('Failed to add chat:', err);
+            }
+          }}
+        />
+      )}
+
       <div className="chat-list-items">
         {filteredChats.map(chat => (
           <div
-            key={chat.id}
+            key={chat._id}
             className={`chat-list-item ${
-              chat.id === selectedChatId ? 'selected' : ''
+              chat._id === selectedChatId ? 'selected' : ''
             }`}
-            onClick={() => onSelectChat(chat.id)}
+            onClick={() => onSelectChat(chat._id)}
           >
-            <img src={chat.avatar} alt={chat.name} className="chat-avatar" />
+            <Avatar
+              avatarUrl={chat.avatarUrl}
+              fallbackId={chat._id}
+              alt={`${chat.firstName} ${chat.lastName}`}
+              isOnline={chat.isOnline}
+            />
             <div className="chat-info">
-              <div className="chat-name">{chat.name}</div>
+              <div className="chat-name">
+                {chat.firstName} {chat.lastName}
+              </div>
               <div className="chat-last-message">
-                {chat.messages[chat.messages.length - 1]?.text ||
-                  'No messages yet'}
+                {chat.messages.length > 0
+                  ? chat.messages[chat.messages.length - 1].text
+                  : 'No messages yet'}
               </div>
             </div>
           </div>

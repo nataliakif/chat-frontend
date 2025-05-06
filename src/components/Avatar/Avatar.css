@@ -1,0 +1,32 @@
+.avatar_container {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border: 1px brown;
+}
+
+.avatar_image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.status_indicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+}
+
+.status_indicator svg {
+  display: block;
+}

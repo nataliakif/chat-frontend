@@ -2,7 +2,7 @@
   "name": "react-homework-template",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://nataliakif.github.io/chat-frontend/",
+  "homepage": "",
   "dependencies": {
     "axios": "^1.9.0",
     "react": "^18.1.0",

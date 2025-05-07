@@ -1,42 +1,36 @@
-.chat-list-header {
+.chat_list_header {
   width: 100%;
   box-sizing: border-box;
   padding: 10px;
   border-bottom: 1px solid #ccc;
 }
 
-.chat-list-header-top {
+.chat_list_header_top {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
 }
 
-.user-avatar img {
+.user_avatar img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
 }
 
-.login-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
+.user_info span {
+  max-width: 120px; /* или сколько тебе нужно */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.login-button:hover {
-  background-color: #005;
-}
-
-.chat-search {
+.chat_search {
   position: relative;
   width: 100%;
 }
 
-.chat-search input {
+.chat_search input {
   width: 80%;
   padding: 8px 12px 8px 32px; /* место для иконки слева */
   border: 2px solid #ccc;
@@ -45,11 +39,11 @@
   outline: none;
 }
 
-.chat-search input:focus {
-  border-color: #007bff;
+.chat_search input:focus {
+  border-color: #4dc0d4;
 }
 
-.search-icon {
+.search_icon {
   position: absolute;
   left: 10px;
   top: 50%;
@@ -59,13 +53,14 @@
   color: #888;
   pointer-events: none; /* чтобы клики проходили сквозь */
 }
-.user-avatar img {
+
+.user_avatar img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
 }
 
-.avatar-placeholder {
+.avatar_placeholder {
   width: 40px;
   height: 40px;
   border-radius: 50%;

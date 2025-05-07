@@ -1,0 +1,36 @@
+.custom_button {
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.custom_button:hover {
+  transform: scale(1.05);
+}
+
+.custom_button:active {
+  transform: scale(0.95);
+}
+
+.custom_button.primary {
+  background-color: #4dc0d4;
+  color: white;
+}
+
+.custom_button.secondary {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.custom_button.secondary:hover {
+  background-color: #e0e0e0;
+}
+
+.custom_button.icon-only {
+  padding: 4px;
+  background: none;
+  border: none;
+}

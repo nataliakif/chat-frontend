@@ -34,7 +34,7 @@ export const App = () => {
       <div style={{ display: 'flex', height: '100vh' }}>
         <ChatList
           chats={chats}
-          setChats={setChats} // ← пробрасываем управление
+          setChats={setChats}
           selectedChatId={selectedChatId}
           onSelectChat={setSelectedChatId}
         />

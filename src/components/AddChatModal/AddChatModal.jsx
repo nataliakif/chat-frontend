@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Button from '../Button/Button';
 import './AddChatModal.css';
 
 const AddChatModal = ({ onClose, onAdd }) => {
@@ -12,9 +13,15 @@ const AddChatModal = ({ onClose, onAdd }) => {
     onClose();
   };
 
+  const handleOverlayClick = e => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
+    <div className="modal_overlay" onClick={handleOverlayClick}>
+      <div className="modal_content">
         <h3>Add New Chat</h3>
         <form onSubmit={handleSubmit}>
           <input
@@ -29,11 +36,13 @@ const AddChatModal = ({ onClose, onAdd }) => {
             value={lastName}
             onChange={e => setLastName(e.target.value)}
           />
-          <div className="modal-buttons">
-            <button type="submit">Add</button>
-            <button type="button" onClick={onClose}>
+          <div className="modal_buttons">
+            <Button className="secondary" type="button" onClick={onClose}>
               Cancel
-            </button>
+            </Button>
+            <Button className="primary" type="submit">
+              Add
+            </Button>
           </div>
         </form>
       </div>

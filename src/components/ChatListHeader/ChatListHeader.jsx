@@ -1,24 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './ChatListHeader.css';
+import Button from '../Button/Button';
+import { getCurrentUser } from '../../api/chatApi';
 
-const ChatListHeader = ({
-  searchQuery,
-  onSearchChange,
-  loggedIn,
-  userAvatarUrl,
-}) => {
+const ChatListHeader = ({ searchQuery, onSearchChange }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getCurrentUser()
+      .then(data => setUser(data))
+      .catch(() => setUser(null))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleLogin = () => {
+    window.location.href = 'http://localhost:5001/auth/google';
+  };
+
+  const handleLogout = () => {
+    window.location.href = 'http://localhost:5001/auth/logout';
+  };
+
+  const displayName = user
+    ? user.firstName && user.lastName
+      ? `${user.firstName} ${user.lastName}`
+      : user.email
+    : '';
+
   return (
-    <div className="chat-list-header">
-      <div className="chat-list-header-top">
-        <div className="user-avatar">
-          {loggedIn ? (
-            <img src={userAvatarUrl} alt="User avatar" />
+    <div className="chat_list_header">
+      <div className="chat_list_header_top">
+        <div className="user_avatar">
+          {user && user.avatarURL ? (
+            <img src={user.avatarURL} alt="User avatar" />
           ) : (
-            <div className="avatar-placeholder">
+            <div className="avatar_placeholder">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                width="40"
+                height="40"
                 fill="#ccc"
                 viewBox="0 0 24 24"
               >
@@ -28,11 +49,23 @@ const ChatListHeader = ({
             </div>
           )}
         </div>
-        <button className="login-button">Log in</button>
+        <div className="user_info">
+          {user && <span>{displayName || user.email}</span>}
+        </div>
+        <div className="user_actions">
+          {!loading && (
+            <Button
+              className="primary"
+              onClick={user ? handleLogout : handleLogin}
+            >
+              {user ? 'Logout' : 'Login'}
+            </Button>
+          )}
+        </div>
       </div>
-      <div className="chat-search">
+      <div className="chat_search">
         <svg
-          className="search-icon"
+          className="search_icon"
           xmlns="http://www.w3.org/2000/svg"
           width="16"
           height="16"

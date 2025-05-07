@@ -1,0 +1,48 @@
+.chat_item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.chat_item:hover {
+  background-color: #f9f9f9;
+}
+
+.chat_item.selected {
+  background-color: #e6f7ff;
+}
+
+.chat_info {
+  flex: 1;
+  margin-left: 10px;
+}
+
+.chat_name {
+  font-weight: bold;
+}
+
+.chat_last_message {
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.delete_button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  margin-left: auto;
+}
+
+.delete_button svg {
+  stroke: #ccc;
+  transition: stroke 0.2s;
+}
+
+.delete_button:hover svg {
+  stroke: #ccc;
+}

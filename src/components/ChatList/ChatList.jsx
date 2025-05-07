@@ -1,69 +1,86 @@
-import { useState } from 'react';
-import { addNewChat } from '../../api/chatApi';
+import { useState, useMemo } from 'react';
+import { addNewChat, getAllChats, deleteChat } from '../../api/chatApi';
 import ChatListHeader from '../ChatListHeader/ChatListHeader';
-import Avatar from '../Avatar/Avatar';
 import AddChatModal from '../AddChatModal/AddChatModal';
+import ChatItem from '../ChatItem/ChatItem';
 import './ChatList.css';
+import { toast } from 'react-toastify';
 
 const ChatList = ({ chats, setChats, selectedChatId, onSelectChat }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
 
-  const filteredChats = chats.filter(chat =>
-    `${chat.firstName} ${chat.lastName}`
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase())
+  const handleAddChat = async newChatData => {
+    try {
+      const createdChat = await addNewChat(newChatData);
+      if (createdChat && createdChat._id) {
+        setChats(prev => [...prev, createdChat]);
+      } else {
+        const updatedChats = await getAllChats();
+        setChats(updatedChats);
+      }
+    } catch (err) {
+      console.error('Failed to add chat:', err);
+    }
+  };
+
+  const handleDelete = async chatId => {
+    if (!window.confirm('Are you sure you want to delete this chat?')) return;
+    try {
+      await deleteChat(chatId);
+      setChats(prev => prev.filter(chat => chat._id !== chatId));
+      toast.success('Chat deleted!');
+    } catch (error) {
+      console.error('Failed to delete chat:', error);
+      toast.error('Failed to delete chat.');
+    }
+  };
+
+  const filteredChats = useMemo(
+    () =>
+      chats.filter(chat =>
+        `${chat.firstName} ${chat.lastName}`
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
+      ),
+    [chats, searchQuery]
   );
 
   return (
-    <div className="chat-list">
+    <div className="chat_list">
       <ChatListHeader
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
       />
-      <div className="chat-list-title">Chats</div>
-      <button onClick={() => setShowAddModal(true)}>+ Add Chat</button>
+      <div className="chat_list_container">
+        <div className="chat_list_title">Chats</div>
+        <button
+          className="add_chat_button"
+          onClick={() => setShowAddModal(true)}
+        >
+          ＋ Add Chat
+        </button>
+      </div>
 
       {showAddModal && (
         <AddChatModal
           onClose={() => setShowAddModal(false)}
-          onAdd={async newChatData => {
-            try {
-              const createdChat = await addNewChat(newChatData);
-              setChats(prev => [...prev, createdChat]); // ← напрямую обновляем App-стейт
-            } catch (err) {
-              console.error('Failed to add chat:', err);
-            }
-          }}
+          onAdd={handleAddChat}
         />
       )}
 
-      <div className="chat-list-items">
+      <div className="chat_list_items">
         {filteredChats.map(chat => (
-          <div
+          <ChatItem
             key={chat._id}
-            className={`chat-list-item ${
-              chat._id === selectedChatId ? 'selected' : ''
-            }`}
-            onClick={() => onSelectChat(chat._id)}
-          >
-            <Avatar
-              avatarUrl={chat.avatarUrl}
-              fallbackId={chat._id}
-              alt={`${chat.firstName} ${chat.lastName}`}
-              isOnline={chat.isOnline}
-            />
-            <div className="chat-info">
-              <div className="chat-name">
-                {chat.firstName} {chat.lastName}
-              </div>
-              <div className="chat-last-message">
-                {chat.messages.length > 0
-                  ? chat.messages[chat.messages.length - 1].text
-                  : 'No messages yet'}
-              </div>
-            </div>
-          </div>
+            chat={{
+              ...chat,
+              ownerLabel: chat.owner ? 'My chat' : 'Default chat', // добавляем безопасную подпись
+            }}
+            isSelected={chat._id === selectedChatId}
+            onSelect={onSelectChat}
+            onDelete={handleDelete}
+          />
         ))}
       </div>
     </div>

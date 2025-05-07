@@ -4,6 +4,8 @@ const api = axios.create({
   baseURL:
     process.env.REACT_APP_API_URL ||
     'https://chat-backend-g81a.onrender.com/api',
+  // process.env.REACT_APP_API_URL || 'http://localhost:5001/api',
+
   timeout: 5000,
   withCredentials: true,
 });

@@ -15,11 +15,11 @@ const ChatListHeader = ({ searchQuery, onSearchChange }) => {
   }, []);
 
   const handleLogin = () => {
-    window.location.href = 'http://localhost:5001/auth/google';
+    window.location.href = 'https://chat-backend-g81a.onrender.com/auth/google';
   };
 
   const handleLogout = () => {
-    window.location.href = 'http://localhost:5001/auth/logout';
+    window.location.href = 'https://chat-backend-g81a.onrender.com/auth/logout';
   };
 
   const displayName = user

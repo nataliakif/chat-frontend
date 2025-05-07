@@ -13,10 +13,18 @@ const ChatWindow = ({ selectedChat, refreshChats }) => {
   const [editLastName, setEditLastName] = useState(selectedChat.lastName);
   const lastMessageCount = useRef(selectedChat.messages.length);
 
-  //eslint-disable-next-line react-hooks/exhaustive-deps
-  // useEffect(() => {
-  //   lastMessageCount.current = selectedChat.messages.length;
-  // }, [selectedChat._id]);
+  useEffect(() => {
+    setEditFirstName(selectedChat.firstName);
+    setEditLastName(selectedChat.lastName);
+    setIsEditing(false);
+  }, [selectedChat]);
+
+  useEffect(
+    () => {
+      lastMessageCount.current = selectedChat.messages.length;
+    }, //eslint-disable-next-line react-hooks/exhaustive-deps
+    [selectedChat._id]
+  );
 
   useEffect(() => {
     const newMessages = selectedChat.messages.slice(lastMessageCount.current);

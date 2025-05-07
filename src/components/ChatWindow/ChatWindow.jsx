@@ -14,9 +14,9 @@ const ChatWindow = ({ selectedChat, refreshChats }) => {
   const lastMessageCount = useRef(selectedChat.messages.length);
 
   //eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    lastMessageCount.current = selectedChat.messages.length;
-  }, [selectedChat._id]);
+  // useEffect(() => {
+  //   lastMessageCount.current = selectedChat.messages.length;
+  // }, [selectedChat._id]);
 
   useEffect(() => {
     const newMessages = selectedChat.messages.slice(lastMessageCount.current);
